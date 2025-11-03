@@ -1,7 +1,8 @@
 ---
 obsidianUIMode: preview
 ---
-# 1 | Identifikasi Entitias
+# Marketplace Multi Vendor
+## 1 | Identifikasi Entitias
 
 ### 1.1 | Tentang User
 
@@ -50,7 +51,7 @@ Pegiriman paket atau barang:
 
 ---
 
-# 2 | Tentang User
+## 2 | Tentang User
 
 ### 2.1 | Kelompok Entitas User
 
@@ -230,7 +231,7 @@ Untuk menandai apakah pembeli tertentu sudah pernah menggunakan voucher tersebut
 <br/>
 
 ---
-# 3 | Tentang Produk
+## 3 | Tentang Produk
 
 ### 3.1 | Entitas Produk
 
@@ -342,7 +343,7 @@ Karena setiap ulasan bisa mengandung media seperti foto atau video, maka dibuatl
 
 ---
 
-# 4 | Proses Transaksi 
+## 4 | Proses Transaksi 
 
 ### 4.1 | Entitas Pemesanan
 
