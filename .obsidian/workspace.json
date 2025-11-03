@@ -1,0 +1,321 @@
+{
+  "main": {
+    "id": "e4ea98e908d5f962",
+    "type": "split",
+    "children": [
+      {
+        "id": "6db8783bc2ced247",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5a440c3c3b5a7b2a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ERD Marketplace Multivendor.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ERD Marketplace Multivendor"
+            }
+          },
+          {
+            "id": "2c6e3d21f1a80e92",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ERD Marketplace Multivendor.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ERD Marketplace Multivendor"
+            }
+          },
+          {
+            "id": "b9a81dc5107aea91",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "f07c6c922f69ab43",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2025-11-01 17.26.57.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2025-11-01 17.26.57.excalidraw"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "047fdaf98d210095",
+    "type": "split",
+    "children": [
+      {
+        "id": "d82e368ee9c464ed",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "04554e08cc1bd94b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "601fc64f077fb420",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "destructor",
+                "matchingCase": true,
+                "explainSearch": true,
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "1b0aa742f2de9d7e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 266.5
+  },
+  "right": {
+    "id": "5a2e04e3f27c45d3",
+    "type": "split",
+    "children": [
+      {
+        "id": "8db22185f832f694",
+        "type": "tabs",
+        "dimension": 28.57142857142857,
+        "children": [
+          {
+            "id": "ddbc58e96e17e8dc",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "04-Data Structure/D-Queue/01-Queue Data Structure (geeksforgeeks.org).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 01-Queue Data Structure (geeksforgeeks.org)"
+            }
+          },
+          {
+            "id": "f75449668ba3cf32",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Untitled.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Untitled"
+            }
+          },
+          {
+            "id": "93efce7ac2eff4c5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": true,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "406e6c1b3ee859cd",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          },
+          {
+            "id": "085bcb1cec5430c0",
+            "type": "leaf",
+            "state": {
+              "type": "tags-overview-view",
+              "state": {},
+              "icon": "tag",
+              "title": "Tags overview"
+            }
+          },
+          {
+            "id": "79043daadebb42d8",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          },
+          {
+            "id": "879b1d710b9777af",
+            "type": "leaf",
+            "state": {
+              "type": "aHR0cHM6Ly9jaGF0Z3B0LmNvbS8=",
+              "state": {},
+              "icon": "aHR0cHM6Ly9jaGF0Z3B0LmNvbS8=",
+              "title": "ChatGPT"
+            }
+          }
+        ],
+        "currentTab": 1
+      },
+      {
+        "id": "7cf76667223e7faa",
+        "type": "tabs",
+        "dimension": 71.42857142857143,
+        "children": [
+          {
+            "id": "b926b8ed78989612",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Untitled.md",
+                "followCursor": false,
+                "showSearch": true,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Untitled"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 386.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "switcher:Open quick switcher": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "graph:Open graph view": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "templater-obsidian:Templater": false,
+      "tags-overview:Tags overview": false,
+      "dashboard-navigator:Open dashboard navigator": false,
+      "iconic:Open rulebook": false,
+      "quickadd:QuickAdd": false,
+      "open-gate:ChatGPT": false
+    }
+  },
+  "active": "2c6e3d21f1a80e92",
+  "lastOpenFiles": [
+    "Helper Note.md",
+    "ERD Marketplace Multivendor.md",
+    "Excalidraw/Drawing 2025-11-01 17.26.57.excalidraw.md",
+    "MySQL Tutorial/Cara Aktifkan MySQL Server Manual.md",
+    "Untitled 1.md",
+    "MySQL Tutorial",
+    "Teori Basis Data/05-SQL (Search Query Language).md",
+    "Teori Basis Data/04-Aturan Normalisasi.md",
+    "Teori Basis Data/03-Entity Relationship Diagram.md",
+    "Teori Basis Data/01-Penjelasan Awal Basis Data.md",
+    "Teori Basis Data/02-Sistem Basis Data.md",
+    "Untitled.md",
+    "Excalidraw/Drawing 2025-10-21 09.03.59.excalidraw.md",
+    "Excalidraw",
+    "Teori Basis Data",
+    "!Important Notes/My Task.md",
+    "Codeforces-Death Ground/800/1372A-Omkar and Completion.md",
+    "Codeforces-Death Ground/800/1611A-Make Even.md",
+    "Codeforces-Death Ground/800/1538B-Friends and Candies.md",
+    "Codeforces-Death Ground/800/1741A-Compare T-Shirt Sizes.md",
+    "Codeforces-Death Ground/800/1932A-Thorns and Coins.md",
+    "EEP & IEP Program/EEP Daily Session.md",
+    "Codeforces-Death Ground/800",
+    "EEP & IEP Program/EEP Program/Rencana Harian.md",
+    "Codeforces-Death Ground/1100/368B-Sereja and Suffixes.md",
+    "Codeforces-Death Ground/1100/1327A-Sum of Odd Integers.md",
+    "Codeforces-Death Ground/1100/456A-Laptops.md",
+    "Codeforces-Death Ground/1100/270A-Fancy Fence.md",
+    "Codeforces-Death Ground/1100/313B-Ilya and Queries.md",
+    "Codeforces-Death Ground/1100/706B-Interesting drink.md",
+    "Codeforces-Death Ground/Z-src/459A-Pashmak and Garden-1.png",
+    "Codeforces-Death Ground/Z-src",
+    "Codeforces-Death Ground/Z-src/459A-Pashmak and Garden-2.png",
+    "Codeforces-Death Ground/Z-src/459A-Pashmak and Garden-3.png",
+    "Codeforces-Death Ground/Z-src/459A-Pashmak and Garden-2.png",
+    "Algorithm (Expansion)",
+    "EEP & IEP Program/EEP Program",
+    "Z Quick Add Templater",
+    "!Important Notes",
+    "ZZ-Temporary Image Vault/Input & Output-1.png",
+    "ZZ-Temporary Notes Vault",
+    "ZZ-Temporary Image Vault/Linked list - Linked list Data Structure-2.png",
+    "ZZ-Temporary Image Vault/The Secret to Winning in Life - Winners' Matrix-4.png",
+    "ZZ-Temporary Image Vault/graph (1).png",
+    "ZZ-Temporary Image Vault/D-Saklar Lhompat-1.png",
+    "DELIBERATE PRACTICE/Untitled.canvas",
+    "Untitled.canvas",
+    "Untitled 1.canvas",
+    "Canvas/01-introduction.canvas",
+    "Pohon Competitive Programming.canvas",
+    "ZZZ Uncotegorized file/Big plan.canvas",
+    "Mata Kuliah Terkait/Semester 1/1. Manajemen data dan Informasi/modelbisnis.canvas",
+    "Mata Kuliah Terkait/Semester 1/1. Manajemen data dan Informasi/Tanpa judul.canvas"
+  ]
+}

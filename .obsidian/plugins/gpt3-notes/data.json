@@ -1,0 +1,58 @@
+{
+  "appName": "GP3_NOTES",
+  "token": "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",
+  "model": "gpt-3.5-turbo",
+  "tokens": 1200,
+  "temperature": 9,
+  "promptHistory": [
+    {
+      "prompt": "tuliskan tentang cerita banjir",
+      "processedPrompt": "tuliskan tentang cerita banjir",
+      "temperature": 0.5,
+      "tokens": 300
+    },
+    {
+      "prompt": "ceritakan tentang banjir",
+      "processedPrompt": "ceritakan tentang banjir",
+      "temperature": 0.5,
+      "tokens": 300
+    },
+    {
+      "prompt": "Write an essay with sources ",
+      "processedPrompt": "Write an essay with sources ",
+      "temperature": 0.5,
+      "tokens": 300
+    },
+    {
+      "prompt": "write an essay about Titanic",
+      "processedPrompt": "write an essay about Titanic",
+      "temperature": 0.4,
+      "tokens": 1200
+    },
+    {
+      "prompt": "Write a program with Pyhton",
+      "processedPrompt": "Write a program with Pyhton",
+      "temperature": 0.9,
+      "tokens": 1200
+    }
+  ],
+  "tokenParams": {
+    "prefix": [
+      "Write an essay",
+      "Write dashed notes",
+      "Write bullet notes",
+      "Write paragraphs",
+      "Write an article",
+      "Create a manual",
+      "Create an outline",
+      "Write a summary",
+      "Write a program"
+    ],
+    "postfix": [
+      "with sources",
+      "with footnotes",
+      "with comments",
+      "with quotes"
+    ]
+  }
+}
