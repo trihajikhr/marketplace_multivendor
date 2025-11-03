@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "README.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -57,8 +57,7 @@
               "title": "excalidraw"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -262,7 +261,7 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "04554e08cc1bd94b",
+  "active": "5a440c3c3b5a7b2a",
   "lastOpenFiles": [
     "README.md",
     "README.md",
