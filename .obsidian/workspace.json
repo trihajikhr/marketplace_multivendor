@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ERD Marketplace Multivendor.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ERD Marketplace Multivendor"
+              "title": "README"
             }
           },
           {
@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ERD Marketplace Multivendor.md",
+                "file": "README.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ERD Marketplace Multivendor"
+              "title": "README"
             }
           },
           {
@@ -115,8 +115,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 266.5,
-    "collapsed": true
+    "width": 266.5
   },
   "right": {
     "id": "5a2e04e3f27c45d3",
@@ -263,13 +262,14 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "2c6e3d21f1a80e92",
+  "active": "04554e08cc1bd94b",
   "lastOpenFiles": [
+    "README.md",
+    "README.md",
     "_market_place.drawio",
     "Marketplace_Multivendor",
     "New folder",
     "Helper Note.md",
-    "ERD Marketplace Multivendor.md",
     "Excalidraw/Drawing 2025-11-01 17.26.57.excalidraw.md",
     "MySQL Tutorial/Cara Aktifkan MySQL Server Manual.md",
     "Untitled 1.md",
@@ -304,7 +304,6 @@
     "Codeforces-Death Ground/Z-src/459A-Pashmak and Garden-2.png",
     "Algorithm (Expansion)",
     "EEP & IEP Program/EEP Program",
-    "Z Quick Add Templater",
     "ZZ-Temporary Image Vault/Input & Output-1.png",
     "ZZ-Temporary Image Vault/Linked list - Linked list Data Structure-2.png",
     "ZZ-Temporary Image Vault/The Secret to Winning in Life - Winners' Matrix-4.png",
