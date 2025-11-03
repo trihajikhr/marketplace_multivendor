@@ -20,6 +20,10 @@ Golongan Penjual:
 1. Penjual (sub entitas *pengguna*)
 2. Alamat penjual
 
+Voucher:
+1. Voucher platform
+2. Voucher penjual
+3. Voucher terpakai
 ### 1.2 | Tentang Produk
 
 1. Produk
@@ -136,22 +140,6 @@ Entitas ini akan menjadi **entitas relasi**, yang menghubungkan antara pembeli d
 | tanggal_tambah |            | datetime  |                        |
 > Verif: ✅ Toko favorit
 
-Sebuah platform marketplace sering mengadakan event spesial, yang mana kadang memberikan voucher potongan harga untuk banyak pembeli di platformnya. Jadi, akan dibuat voucher global yang akan menangani hal ini, berupa entitias **voucher** dengan isi sebagai berikut:
-
-
-| Atribut      | Lebar data | Tipe data | Keterangan             |
-| ------------ | ---------- | --------- | ---------------------- |
-| id_voucher   |            | int       | FK (pembeli . id_user) |
-| kode_voucher |            | int       | FK (global voucher)    |
-| nama_voucher |            |           |                        |
-| dekripsi     |            |           |                        |
-| tipe_voucher |            |           |                        |
-| value        |            |           |                        |
-| start_date   |            |           |                        |
-| end_date     |            |           |                        |
-| owner        |            |           |                        |
-
-
 ### 2.3 | Golongan Penjual
 
 Ketika pengguna membuka toko, maka akan ada beberapa data lain yang harus ditambahkan, sehingga dibuat sub entitas **penjual**, yang berasal dari super entitas **pengguna**:
@@ -183,6 +171,51 @@ Penjual akan memiliki alamat yang ditujukan oleh kurir pengangkut barang, sehing
 | is_utama      |            | boolean (default *false*) |                        |
 > Verif: ✅ Alamat penjual
 
+### 2.4 | Voucher
+
+
+Sebuah platform marketplace sering mengadakan event spesial, yang mana kadang memberikan voucher potongan harga untuk banyak pembeli di platformnya. Jadi, akan dibuat voucher global yang akan menangani hal ini, berupa entitias **voucher platform** dengan isi sebagai berikut:
+
+| Atribut             | Lebar data | Tipe data             | Keterangan |
+| ------------------- | ---------- | --------------------- | ---------- |
+| id_voucher_platform | 10         | varchar               | PK         |
+| nama_voucher        | 30         | varchar               |            |
+| deskripsi           | 200        | varchar               |            |
+| tipe_voucher        |            | enum(persen, nominal) |            |
+| value               |            | int                   |            |
+| status              |            | enum(aktif, nonaktif) |            |
+| start_date          |            | datetime              |            |
+| end_date            |            | datetime              |            |
+> Verif: ❌ voucher platform
+
+
+Selain platform yang bisa memberikan voucher, penjual juga bisa membuat voucher yang dikhususkan untuk pembelinya ketika membeli produk dari toko tau marketplacenya. Oleh karena itu dibuatlah entitias **voucher  penjual** sebagai berikut:
+
+
+| Atribut            | Lebar data | Tipe data             | Keterangan             |
+| ------------------ | ---------- | --------------------- | ---------------------- |
+| id_voucher_penjual | 10         | varchar               | PK                     |
+| id_penjual         |            |                       | FK (penjual . id_user) |
+| nama_voucher       | 30         | varchar               |                        |
+| deskripsi          | 200        | varchar               |                        |
+| tipe_voucher       |            | enum(persen, nominal) |                        |
+| value              |            | int                   |                        |
+| status             |            | enum(aktif, nonaktif) |                        |
+| start_date         |            | datetime              |                        |
+| end_date           |            | datetime              |                        |
+> Verif: ❌ voucher penjual
+
+Untuk menandai apakah pembeli tertentu sudah pernah menggunakan voucher tersebut atau belum (pembeli hanya bisa menggunakan voucher satu kali), maka dibuatlah entitias relasi yaitu **voucher terpakai** sebagai berikut:
+
+| Atribut             | Lebar data | Tipe data               | Keterangan                                                                                               |
+| ------------------- | ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------- |
+| id_voucher_terpakai |            | int                     | PK (*auto increment*)                                                                                    |
+| id_pembeli          |            | int                     | FK (pembeli . id_user)                                                                                   |
+| kategori_voucher    |            | enum(platform, penjual) |                                                                                                          |
+| voucher_ref_id      | 10         | varchar                 | FK (voucher_platform . id_voucher_platform)<br><br>atau<br><br>FK (voucher_penjual . id_voucher_penjual) |
+| tanggal_pakai       |            | datetime                |                                                                                                          |
+
+> Verif: ❌ voucher terpakai
 
 
 <br/>

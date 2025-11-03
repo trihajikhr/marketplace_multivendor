@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "ERD Marketplace Multivendor.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -265,6 +265,7 @@
   },
   "active": "2c6e3d21f1a80e92",
   "lastOpenFiles": [
+    "_market_place.drawio",
     "Marketplace_Multivendor",
     "New folder",
     "Helper Note.md",
@@ -304,7 +305,6 @@
     "Algorithm (Expansion)",
     "EEP & IEP Program/EEP Program",
     "Z Quick Add Templater",
-    "!Important Notes",
     "ZZ-Temporary Image Vault/Input & Output-1.png",
     "ZZ-Temporary Image Vault/Linked list - Linked list Data Structure-2.png",
     "ZZ-Temporary Image Vault/The Secret to Winning in Life - Winners' Matrix-4.png",
