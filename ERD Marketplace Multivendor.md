@@ -114,6 +114,10 @@ Ketika bosan, kadang pembeli mencoba mengecek Tokopedia, dan mencari barang bagu
 
 Entitas ini akan menjadi **entitas relasi**, yang terhubung antara pembeli dan produk:
 
+```ad-danger
+Karena waktu yang semakin sempit, maka untuk sementara dibuat tanpa kategori. Dengan kata lain, semua produk yang dimasukan di wishlist tidak bisa dikategorikan oleh user.
+```
+
 | Atribut        | Lebar data | Tipe data | Keterangan              |
 | -------------- | ---------- | --------- | ----------------------- |
 | id_pembeli     |            | int       | FK (pembeli . id_user)  |
@@ -130,14 +134,23 @@ Entitas ini akan menjadi **entitas relasi**, yang menghubungkan antara pembeli d
 | id_pembeli     |            | int       | FK (pembeli . id_user) |
 | id_penjual     |            | int       | FK (penjual . id_user) |
 | tanggal_tambah |            | datetime  |                        |
-> Verif: ❌ Toko favorit
+> Verif: ✅ Toko favorit
 
 Sebuah platform marketplace sering mengadakan event spesial, yang mana kadang memberikan voucher potongan harga untuk banyak pembeli di platformnya. Jadi, akan dibuat voucher global yang akan menangani hal ini, berupa entitias **voucher** dengan isi sebagai berikut:
 
 
-| Atribut | Lebar data | Tipe data | Keterangan |
-| ------- | ---------- | --------- | ---------- |
-|         |            |           |            |
+| Atribut      | Lebar data | Tipe data | Keterangan             |
+| ------------ | ---------- | --------- | ---------------------- |
+| id_voucher   |            | int       | FK (pembeli . id_user) |
+| kode_voucher |            | int       | FK (global voucher)    |
+| nama_voucher |            |           |                        |
+| dekripsi     |            |           |                        |
+| tipe_voucher |            |           |                        |
+| value        |            |           |                        |
+| start_date   |            |           |                        |
+| end_date     |            |           |                        |
+| owner        |            |           |                        |
+
 
 ### 2.3 | Golongan Penjual
 
@@ -155,7 +168,7 @@ Ketika pengguna membuka toko, maka akan ada beberapa data lain yang harus ditamb
 | status_verifikasi |            | enum(belum, proses, verif, ditolak) |                         |
 
 
-> Verif: ❌ Penjual
+> Verif: ✅ Penjual
 
 Penjual akan memiliki alamat yang ditujukan oleh kurir pengangkut barang, sehingga dibuat entitas **alamat penjual**:
 
@@ -168,7 +181,7 @@ Penjual akan memiliki alamat yang ditujukan oleh kurir pengangkut barang, sehing
 | kota          | 50         | varchar                   |                        |
 | kode_pos      | 10         | varchar                   |                        |
 | is_utama      |            | boolean (default *false*) |                        |
-> Verif: ❌ Alamat penjual
+> Verif: ✅ Alamat penjual
 
 
 
@@ -209,7 +222,7 @@ Entitas ini akan melakukan *self referencing*, atau berelasi tunggal ke dirinya 
 | id_kategori       |            | int       | PK (*auto increment*)       |
 | nama_kategori     | 15         | varchar   |                             |
 | id_kategori_induk |            | int       | FK (kategori . id_kategori) |
-
+> Verif: ❌ Kategori
 ### 3.3 | Entitas Varian
 
 Beberapa produk memiliki beberapa varian. Misalnya keyboard dengan merek yang sama, mungkin memiliki beberapa variann warna dan ukuran, dan beberapa produk lain juga. Oleh karena itu, untuk mengatasi beberapa produk yang memiliki lebih dari satu varian, maka dibuat entitas **varian** sebagai berikut:
@@ -226,7 +239,7 @@ Beberapa produk memiliki beberapa varian. Misalnya keyboard dengan merek yang sa
 | status             |            | enum(aktif, nonaktif) |                         |
 | tanggal_dibuat     |            | datetime              |                         |
 | tanggal_diperbarui |            | datetime              |                         |
-
+> Verif: ❌ Varian
 ### 3.3 | Entitas Produk Media
 
 Apa yang lebih meyakinkan pembeli selain gambar produk yang meyakinkan? Gambar yang bagus dan menarik dari produk berguna untuk menarik perhatian pembeli dan menunjukan seperti apa produk yang penjual jual di marketplacenya. Tanpa gambar, setiap membeli produk pasti akan terasa *membeli kucing dalam karung*.
@@ -250,7 +263,7 @@ Maka berikut entitas produk media:
 | no_urut         |            | int                 |                         |
 | is_thumbnail    |            | boolean             |                         |
 | alt_text        | 50         | varchar             |                         |
-
+> Verif: ❌ Produk media
 ### 3.4 | Ulasan
 
 Ulasan suatu produk bisa menjadi tolak ukur kepuasan pembeli, dan seberapa bagus suatu produk. Pembeli yang sudah membeli dan memverifikasi telah menerima barang, bisa memberikan ulasan dan rating terhadap produk tersebut. Pembeli juga bisa memberikan beberapa gambar atau video ulasan sebagai file tambahan.
@@ -267,6 +280,9 @@ Oleh karena itu, dibuatlah entitas **ulasan** sebagai berikut:
 | tanggal_ulasan |            | datetime  |                         |
 | jumlah_like    |            | int       |                         |
 | jumlah_media   |            | int       |                         |
+
+> Verif: ❌ Ulasan
+
 ### 3.5 | Ulasan Media
 
 Karena setiap ulasan bisa mengandung media seperti foto atau video, maka dibuatlah entitias baru untuk menampung media yang berasal dari ulasan pembeli, yaitu entitias **ulasan media**:
@@ -278,6 +294,7 @@ Karena setiap ulasan bisa mengandung media seperti foto atau video, maka dibuatl
 | url_media  | 250        | varchar             |                         |
 | tipe_media |            | enum(gambar, video) |                         |
 | urutan     |            | int                 |                         |
+> Verif: ❌ Ulasan media
 
 <br/>
 
@@ -304,7 +321,7 @@ Maka dibuatlah entitas **pemesanan** sebagai berikut:
 | metode_pembayaran |            | enum (transfer, cod)                                                        |                                 |
 | total_tagihan     |            | int                                                                         |                                 |
 | status            |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                 |
-
+> Verif: ❌ Pemesanan
 ### 4.2 | Entitas Detail Pemesanan
 
 Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yang bagus adalah membuat entitas detail pemesanan untuk lebih merincikan produk yang dipesan. Oleh karena itu dibuatlah entitas baru berupa **detail pemesanan**, dengan atribut berikut:
@@ -317,3 +334,4 @@ Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yan
 | kuantitas     |            | int       |                               |
 | harga_satuan  |            | int       |                               |
 | subtotal_item |            | int       |                               |
+> Verif: ❌ Detail pemesanan

@@ -53,8 +53,8 @@
               "state": {
                 "file": "Excalidraw/Drawing 2025-11-01 17.26.57.excalidraw.md"
               },
-              "icon": "excalidraw-icon",
-              "title": "Drawing 2025-11-01 17.26.57.excalidraw"
+              "icon": "lucide-ghost",
+              "title": "excalidraw"
             }
           }
         ],
@@ -115,7 +115,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 266.5
+    "width": 266.5,
+    "collapsed": true
   },
   "right": {
     "id": "5a2e04e3f27c45d3",
@@ -190,8 +191,8 @@
             "state": {
               "type": "tags-overview-view",
               "state": {},
-              "icon": "tag",
-              "title": "Tags overview"
+              "icon": "lucide-ghost",
+              "title": "tags-overview-view"
             }
           },
           {
@@ -200,8 +201,8 @@
             "state": {
               "type": "calendar",
               "state": {},
-              "icon": "calendar-with-checkmark",
-              "title": "Calendar"
+              "icon": "lucide-ghost",
+              "title": "calendar"
             }
           },
           {
@@ -210,8 +211,8 @@
             "state": {
               "type": "aHR0cHM6Ly9jaGF0Z3B0LmNvbS8=",
               "state": {},
-              "icon": "aHR0cHM6Ly9jaGF0Z3B0LmNvbS8=",
-              "title": "ChatGPT"
+              "icon": "lucide-ghost",
+              "title": "aHR0cHM6Ly9jaGF0Z3B0LmNvbS8="
             }
           }
         ],
@@ -248,18 +249,18 @@
     "hiddenItems": {
       "bases:Create new base": false,
       "switcher:Open quick switcher": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "graph:Open graph view": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "templater-obsidian:Templater": false,
       "tags-overview:Tags overview": false,
-      "dashboard-navigator:Open dashboard navigator": false,
+      "open-gate:ChatGPT": false,
       "iconic:Open rulebook": false,
       "quickadd:QuickAdd": false,
-      "open-gate:ChatGPT": false
+      "templater-obsidian:Templater": false,
+      "dashboard-navigator:Open dashboard navigator": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "2c6e3d21f1a80e92",
