@@ -36,8 +36,15 @@ Voucher:
 ### 1.3 | Proses transaksi
 
 1. Pemesanan
+
+Pendukung entitas Pemesanan:
+1. Pemesanan voucher
 2. Detail pemesanan
 
+Pegiriman paket atau barang:
+1. Logistik
+2. Layanan_pengiriman
+3. Detail_pengiriman
 
 <br/>
 
@@ -183,6 +190,7 @@ Sebuah platform marketplace sering mengadakan event spesial, yang mana kadang me
 | deskripsi           | 200        | varchar               |            |
 | tipe_voucher        |            | enum(persen, nominal) |            |
 | value               |            | int                   |            |
+| min_value           |            | int                   |            |
 | status              |            | enum(aktif, nonaktif) |            |
 | start_date          |            | datetime              |            |
 | end_date            |            | datetime              |            |
@@ -200,6 +208,7 @@ Selain platform yang bisa memberikan voucher, penjual juga bisa membuat voucher 
 | deskripsi          | 200        | varchar               |                        |
 | tipe_voucher       |            | enum(persen, nominal) |                        |
 | value              |            | int                   |                        |
+| min_value          |            | int                   |                        |
 | status             |            | enum(aktif, nonaktif) |                        |
 | start_date         |            | datetime              |                        |
 | end_date           |            | datetime              |                        |
@@ -341,21 +350,37 @@ Pembeli bisa saja membeli beberapa produk sekaligus dalam sekali pemesanan. Enta
 
 Maka dibuatlah entitas **pemesanan** sebagai berikut:
 
-| Atribut           | Lebar data | Tipe data                                                                   | Keterangan                      |
-| ----------------- | ---------- | --------------------------------------------------------------------------- | ------------------------------- |
-| id_pemesanan      |            | int                                                                         | PK (*auto increment*)           |
-| id_pembeli        |            | int                                                                         | FK (pembeli . id_user)          |
-| id_penjual        |            | int                                                                         | FK (penjual . id_user)          |
-| id_alamat_penjual |            | int                                                                         | FK (alamat_penjual . id_alamat) |
-| id_alamat_pembeli |            | int                                                                         | FK (alamat_pembeli . id_alamat) |
-| date_pesan        |            | datetime                                                                    |                                 |
-| id_pengiriman     |            | int                                                                         | FK (logistik . id_logistik)     |
-| catatan_pembeli   | 200        | varchar                                                                     |                                 |
-| metode_pembayaran |            | enum (transfer, cod)                                                        |                                 |
-| total_tagihan     |            | int                                                                         |                                 |
-| status            |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                 |
+| Atribut              | Lebar data | Tipe data                                                                   | Keterangan                                    |
+| -------------------- | ---------- | --------------------------------------------------------------------------- | --------------------------------------------- |
+| id_pemesanan         |            | int                                                                         | PK (*auto increment*)                         |
+| id_pembeli           |            | int                                                                         | FK (pembeli . id_user)                        |
+| id_penjual           |            | int                                                                         | FK (penjual . id_user)                        |
+| id_alamat_penjual    |            | int                                                                         | FK (alamat_penjual . id_alamat)               |
+| id_alamat_pembeli    |            | int                                                                         | FK (alamat_pembeli . id_alamat)               |
+| id_detail_pengiriman |            | int                                                                         | FK (detail_pengiriman . id_detail_pengiriman) |
+| date_pesan           |            | datetime                                                                    |                                               |
+| catatan_pembeli      | 200        | varchar                                                                     |                                               |
+| metode_pembayaran    |            | enum (transfer, cod)                                                        |                                               |
+| tagihan_produk       |            | int                                                                         |                                               |
+| ongkos_kirim         |            | int                                                                         |                                               |
+| harga_total          |            | int                                                                         |                                               |
+| status               |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                               |
+
+
 > Verif: ❌ Pemesanan
-### 4.2 | Entitas Detail Pemesanan
+
+### 4.2 | Pendukung Entititas Pemesanan
+
+Karena dalam satu pemesanan bisa menggunakan beberapa voucher, misal pembeli menggunakan voucher platform dan voucher penjual diwaktu yang sama, maka dibuat entitas relasi, karena terdapat hubungan many-to-many, sehingga dibuat table **pemesanan voucher** seperti berikut:
+
+
+| Atribut             | Lebar data | Tipe data | Keterangan                                  |
+| ------------------- | ---------- | --------- | ------------------------------------------- |
+| id_pemesanan        |            | int       | FK (pemesanan . id_pemesanan)               |
+| id_voucher_terpakai | 10         | varchar   | FK (voucher_terpakai . id_voucher_terpakai) |
+| potongan_diterapkan |            | int       |                                             |
+
+> Verif: ❌ Pemesanan voucher
 
 Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yang bagus adalah membuat entitas detail pemesanan untuk lebih merincikan produk yang dipesan. Oleh karena itu dibuatlah entitas baru berupa **detail pemesanan**, dengan atribut berikut:
 
@@ -368,3 +393,71 @@ Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yan
 | harga_satuan  |            | int       |                               |
 | subtotal_item |            | int       |                               |
 > Verif: ❌ Detail pemesanan
+
+
+### 4.3 | Pengiriman Paket atau Barang
+
+Ketika pembeli membeli barang, maka barang tersebut akan diambil dari penjual, dan dikirimkan ke pembeli. Dan... sudah. 
+
+Tidak semudah itu ferguso. Ini bagian yang paling rumit disini 🥲.
+
+```ad-danger
+1. Pertama, ketika pembeli membeli barang, pembeli bisa memilih layanan pengiriman yang disediakan oleh beberapa perusahaan logistik seperti JNE, JNT, siCepat, dan semacamnya, yang mana masing-masing jasa pengiriman memiliki layanan yang memiliki harga yang mungkin berbeda
+
+2. Kedua, pembeli harus mengetahui ongkos kirim yang mungkin berlaku. 
+
+3. Ketiga, pembeli mengetahui estimasi hari yang dibutuhkan untuk barang yang ia beli bisa sampai.
+```
+
+Untuk mengatasi masalah pertama, maka entitas pemesanan harus memiliki atribut yang berasal dari entitas yang mengerjakan peengiriman. Maka, dibuatlah entitias **logistik** sebagai berikut:
+
+
+| Atribut       | Lebar data | Tipe data             | Keterangan            |
+| ------------- | ---------- | --------------------- | --------------------- |
+| id_logistik   |            | int                   | PK (*auto increment*) |
+| kode_logistik | 10         | varchar               |                       |
+| nama_logistik | 20         | varchar               |                       |
+| kontak_cs     | 15         | varchar               |                       |
+| status        |            | enum(aktif, nonaktif) |                       |
+| keterangan    |            | text                  |                       |
+> Verif: ❌ Logistik
+
+Lalu, karena setiap logistik memiliki beberapa layanan, misal JNE memiliki layanan berupa pengiriman regulasi, ekonomi, express, atau instan, maka dibuat entitas **layanan pengiriman** sebagai berikut:
+
+
+| Atribut                 | Lebar data | Tipe data | Keterangan                  |
+| ----------------------- | ---------- | --------- | --------------------------- |
+| id_layanan_pengiriman   |            | int       | PK (*auto increment*)       |
+| id_logistik             |            | int       | FK (logistik . id_logistik) |
+| nama_layanan            | 20         | varchar   |                             |
+| minimal_jarak           |            | float     |                             |
+| harga_per_km            |            | float     |                             |
+| harga_per_kg            |            | float     |                             |
+| estimasi_perhari_tempuh |            | int       |                             |
+
+> Verif: ❌ Layanan pengiriman
+
+Karena menaruh detail transaksi di entitias pemesanan, maka akan lebih baik untuk membuat entitias **detail pengiriman**, sehingga entitias pemesanan hanya perlu menyimpan FK dari PK di detail pengiriman, yang kira-kira berisi sebagai berikut:
+
+
+| Atribut              | Lebar data | Tipe data | Keterangan                                      |
+| -------------------- | ---------- | --------- | ----------------------------------------------- |
+| id_detail_pengiriman |            | int       | PK (*auto increment*)                           |
+| id_pemesanan         |            | int       | FK (pemesanan . id_pemesanan)                   |
+| id_layanan           |            | int       | FK (layanan_pengiriman . id_layanan_pengiriman) |
+| jarak_tempuh         |            | int       |                                                 |
+| harga_tempuh         |            | float     |                                                 |
+| harga_berat          |            | float     |                                                 |
+| total                |            | int       |                                                 |
+| estimasi_hari        |            | int       |                                                 |
+
+> Verif: ❌ Detail pengiriman
+
+Untuk pengisian entitas diatas, didasarkan pada perkiraan rumus berikut:
+
+1. `Jarak tempuh` didapat dari menghitung jarak dari `alamat pembeli` dan `penerima`. 
+2. Harga tempuh didapat dari perhitunga `per km` layanan pengiriman dengan `jarak tempuh`.
+3. Harga berat didapat dari perhitungan `harga per kg` layanan dikali dengan `berat total produk`.
+4. `Total` didapat dari menambahkan hasil dari `harga tempuh` + `harga berat`. 
+5. `Estimasi hari` didapat dengan membagi jarak tempuh dengan `estimasi_perhari_tempuh` yang dibulatkan ke atas. 
+
