@@ -2,62 +2,40 @@
 obsidianUIMode: preview
 ---
 # Marketplace Multi Vendor
-## 1 | Identifikasi Entitias
+# 1 | Identifikasi Entitias
 
-### 1.1 | Tentang User
-
-Kelompok Entitas User:
 1. Pengguna
 2. Rekening
 3. Bank
-
-Golongan pembeli:
-1. Pembeli (sub entitias *pengguna*)
-2. Alamat pembeli
-3. Wishlist
-4. Toko favorit
-
-Golongan Penjual:
-1. Penjual (sub entitas *pengguna*)
-2. Alamat penjual
-
-Voucher:
-1. Voucher platform
-2. Voucher penjual
-3. Voucher terpakai
-### 1.2 | Tentang Produk
-
-1. Produk
-2. Varian
-3. Kategori
-4. Produk Media
-5. Ulasan
-6. Ulasan Media
-
-### 1.3 | Proses transaksi
-
-1. Pemesanan
-
-Pendukung entitas Pemesanan:
-1. Pemesanan voucher
-2. Detail pemesanan
-
-Pegiriman paket atau barang:
-1. Logistik
-2. Layanan_pengiriman
-3. Detail_pengiriman
+4. Alamat
+5. Pembeli (sub entitias *pengguna*)
+6. Wishlist
+7. Toko favorit
+8. Penjual (sub entitas *pengguna*)
+9. Voucher platform
+10. Voucher penjual
+11. Voucher terpakai
+12. Produk
+13. Varian
+14. Kategori
+15. Produk Media
+16. Ulasan
+17. Ulasan Media
+18. Pemesanan
+19. Detail pemesanan
+20. Logistik
+21. Layanan pengiriman
+22. Detail pengiriman
 
 <br/>
 
 ---
 
-## 2 | Tentang User
+# 2 | Identifikasi Atribut 
 
-### 2.1 | Kelompok Entitas User
+## 2.1 | Entitas pengguna
 
-Melihat dari marketplace seperti Tokopedia, satu pengguna bisa memiliki 2 role. Pengguna yang langsung menggunakan tokopedia sebagai tempat shooping akan otomatis dikategorikan sebagai *pembeli*. Tapi ada menu di Tokopedia, dimana kita bisa *buka toko*, atau dengan kata lain: Satu akun bisa digunakan sebagai pembeli dan penjual.
-
-Sehingga dibuat entitas super, dan 2 sub entitias. Ini entitas **pengguna** misal:
+Melihat dari marketplace seperti Tokopedia, satu pengguna bisa memiliki 2 role. Pengguna akan langsung memiliki role sebagai pembeli ketika pertama kali mendaftar. Pendaftaran dilakukan dengan mendaftarkan email, password, dan nama dari user. Pengguna bisa memiliki akun yang sama untuk berbelanja sebagai pembeli, lalu menggunakan akun yang sama untuk mendaftar sebagai penjual dan membuat toko untuk menjual produk:
 
 | Atribut       | Lebar data | Tipe data                  | Keterangan            |
 | ------------- | ---------- | -------------------------- | --------------------- |
@@ -65,97 +43,88 @@ Sehingga dibuat entitas super, dan 2 sub entitias. Ini entitas **pengguna** misa
 | email         | 50         | varchar                    | *unique*              |
 | password      | 255        | varchar                    | *hash*                |
 | nama_lengkap  | 50         | varchar                    |                       |
-| no_hp         | 15         | varchar                    |                       |
+| no_hp         | 15         | varchar                    | *unique*              |
 | tanggal_lahir |            | date                       |                       |
 | tanggal_regis |            | datetime                   |                       |
-| status_akun   |            | enum(aktif, nonaktif, ban) |                       |
+| status_akun   |            | enum(aktif, nonaktif, ban) | default *nonaktif*    |
 | token_reset   | 70         | varchar                    |                       |
-> Verif: ✅ Pengguna
 
-Lalu, baik itu pembeli maupun penjual bisa memiliki beberapa rekening bank, sehingga dibuat entitas baru yaitu **rekening**, yang akan menyimpan daftar rekening bank dari setiap user. Entah itu user memiliki role sebagai penjual atau pembeli, rekening bank yang mereka tambahkan akan masuk ke entitas yang sama:
+## 2.2 | Entititas Rekening 
+
+Baik pembeli maupun penjual dapat mendaftarkan dan memiliki lebih dari satu rekening bank sebagai sumber dana. Oleh karena itu, dibuat entitas baru bernama rekening, yang berfungsi untuk menyimpan daftar rekening bank milik setiap pengguna. Terlepas dari peran pengguna sebagai penjual atau pembeli, seluruh data rekening akan disimpan pada entitas yang sama:
 
 | Atribut      | Lebar data | Tipe data               | Keterangan              |
 | ------------ | ---------- | ----------------------- | ----------------------- |
 | id_rekening  |            | int                     | PK (*auto increment*)   |
 | id_user      |            | int                     | FK (pengguna . id_user) |
 | id_bank      |            | int                     | FK (bank . id_bank)     |
-| no_rekening  | 20         | varchar                 |                         |
-| nama_pemilik | 20         | varchar                 |                         |
-| status_utama |            | boolean (default false) |                         |
-> Verif: ❌ Rekening
+| no_rekening  | 20         | varchar                 | *unique*                |
+| nama_pemilik | 50         | varchar                 |                         |
+| is_utama     |            | boolean (default false) |                         |
+## 2.3 | Entitas Bank
 
-Maka akan disiapkan entititas **bank** yang akan menyimpan detail terhadap bank:
+Entitas Bank memiliki `id_bank` sebagai primary key untuk identitas unik, `nama_bank` untuk nama bank, dan `kode_bank` unik agar tidak ada duplikasi kode. Desain ini baik karena memisahkan data bank dari rekening, mengurangi duplikasi, mempermudah pemeliharaan, dan memastikan integritas data sekaligus mendukung integrasi dengan sistem perbankan.
 
 | Atribut   | Lebar data | Tipe data | Keterangan            |
 | --------- | ---------- | --------- | --------------------- |
 | id_bank   |            | int       | PK (*auto increment*) |
-| nama_bank | 100        | varchar   |                       |
-| kode_bank | 10         | varchar   |                       |
-> Verif: ❌ Bank
+| nama_bank | 30         | varchar   |                       |
+| kode_bank | 10         | varchar   | *unique*              |
 
+## 2.4 | Entitas Alamat
+Entitas Alamat digunakan untuk menyimpan informasi lokasi yang terkait dengan pengguna, baik pembeli maupun penjual. Setiap alamat mencakup detail seperti nama penerima, nomor telepon, label alamat, kota, kode pos, dan tanda apakah alamat tersebut utama. Dengan memisahkan alamat ke entitas tersendiri, sistem dapat mendukung beberapa alamat per pengguna sekaligus menjaga integritas data, memudahkan manajemen pengiriman, dan menghindari duplikasi informasi alamat di entitas pengguna.
 
-### 2.2 | Golongan pembeli
+| Atribut        | Lebar data | Tipe data              | Keterangan              |
+| -------------- | ---------- | ---------------------- | ----------------------- |
+| id_alamat      |            | int                    | PK (*auto increment*)   |
+| is_user        |            | int                    | FK (pengguna . id_user) |
+| label_alamat   | 50         | varchar                |                         |
+| tipe_alamat    |            | enum(pembeli, penjual) |                         |
+| nama_penerima  | 50         | varchar                |                         |
+| no_hp_penerima | 15         | varchar                |                         |
+| detail_alamat  |            | text                   |                         |
+| kota           | 30         | varchar                |                         |
+| kode_pos       | 10         | varchar                |                         |
+| is_utama       |            | boolean                | default *false*         |
 
-Jika pengguna menggunakan Tokopedia sebagai pembeli, maka akan ada data tersimpan sebagai berikut, dimana dibuat entitas **Pembeli**, yang berasal dari super entitas **pengguna**:
+## 2.5 | Entititas Pembeli
+
+Pengguna akan secara otomatis memiliki role sebagai pembeli, sehingga akan dibuat sub entitas pembeli, yang merupakan entitas turunan dari entitias pengguna. Beberapa data yang berkaitan dengan pembeli akan disimpan di entitas turunan ini.
 
 | Atribut         | Lebar data | Tipe data                            | Keterangan              |
 | --------------- | ---------- | ------------------------------------ | ----------------------- |
 | id_user         |            | int                                  | FK (pengguna . id_user) |
-| level_pembeli   |            | enum(bronze, silver, gold, platinum) |                         |
+| level_pembeli   |            | enum(bronze, silver, gold, platinum) | default *bronze*        |
 | total_transaksi |            | int                                  |                         |
 | poin_reward     |            | int                                  |                         |
 | saldo           |            | int                                  |                         |
-> Verif: ✅ Pembeli
 
-Setiap pembeli bisa memiliki banyak alamat. Ambil contoh dimana pembeli Tokopedia bisa menambahkan beberapa alamat, dimana setiap alamat yang ditambahkan berisi juga nama penerima, no hp penerima, dan label alamat. Maka dibuat entitas **alamat pembeli** sebagai berikut:
-
-| Atribut        | Lebar data | Tipe data                 | Keterangan             |
-| -------------- | ---------- | ------------------------- | ---------------------- |
-| id_alamat      |            | int                       | PK (*auto increment*)  |
-| id_pembeli     |            | int                       | FK (pembeli . id_user) |
-| nama_penerima  | 50         | varchar                   |                        |
-| no_hp_penerima | 15         | varchar                   |                        |
-| label_alamat   | 30         | varchar                   |                        |
-| detail_alamat  |            | text                      |                        |
-| kota           | 50         | varchar                   |                        |
-| kode_pos       | 10         | varchar                   |                        |
-| is_utama       |            | boolean (default *false*) |                        |
-> Verif: ✅ Alamat pembeli
-
-Ketika bosan, kadang pembeli mencoba mengecek Tokopedia, dan mencari barang bagus, yang barangkali mereka beli. Ketika mereka menyimpan produk tertentu, maka produk tersebut akan disimpan di wishlist. Maka dibuatlah entitas **wishlist** sebagai berikut.
-
-Entitas ini akan menjadi **entitas relasi**, yang terhubung antara pembeli dan produk:
-
-```ad-danger
-Karena waktu yang semakin sempit, maka untuk sementara dibuat tanpa kategori. Dengan kata lain, semua produk yang dimasukan di wishlist tidak bisa dikategorikan oleh user.
-```
+## 2.6 | Entitas Wishlist
+Entitas wishlist digunakan untuk menyimpan daftar produk yang diinginkan oleh pembeli. Setiap catatan menghubungkan satu pembeli dengan satu produk dan mencatat tanggal penambahan ke wishlist. Dengan adanya entitas ini, sistem dapat memudahkan pembeli untuk menandai produk favorit, memantau harga, atau menyusun daftar belanja, sekaligus menjaga integritas data dengan memastikan relasi yang jelas antara pembeli dan produk yang diinginkan.
 
 | Atribut        | Lebar data | Tipe data | Keterangan              |
 | -------------- | ---------- | --------- | ----------------------- |
 | id_pembeli     |            | int       | FK (pembeli . id_user)  |
 | id_produk      |            | int       | FK (produk . id_produk) |
 | tanggal_tambah |            | datetime  |                         |
-> Verif: ❌ Wishlist
+## 2.7 | Entitas Toko Favorit
 
-Pembeli juga bisa menandai beberapa toko favorit atau kepercayaan mereka. Menu ini ada di Tokopedia, dan bisa ditambahkan dengan cara menfollow suatu toko atau vendor. Maka dibuatlah entitias **toko favorit**.
-
-Entitas ini akan menjadi **entitas relasi**, yang menghubungkan antara pembeli dan penjual:
+Entitas toko favorit digunakan untuk menyimpan daftar toko yang ditandai sebagai favorit oleh pembeli. Setiap catatan menghubungkan satu pembeli dengan satu penjual, sehingga sistem dapat melacak toko-toko yang sering dikunjungi atau disukai pembeli. Dengan entitas ini, pembeli dapat dengan mudah mengakses toko favorit mereka, sementara sistem dapat memanfaatkan data ini untuk rekomendasi atau promosi, sekaligus menjaga integritas relasi antara pembeli dan penjual.
 
 | Atribut        | Lebar data | Tipe data | Keterangan             |
 | -------------- | ---------- | --------- | ---------------------- |
 | id_pembeli     |            | int       | FK (pembeli . id_user) |
 | id_penjual     |            | int       | FK (penjual . id_user) |
 | tanggal_tambah |            | datetime  |                        |
-> Verif: ✅ Toko favorit
 
-### 2.3 | Golongan Penjual
+## 2.8 | Entitas Penjual
 
-Ketika pengguna membuka toko, maka akan ada beberapa data lain yang harus ditambahkan, sehingga dibuat sub entitas **penjual**, yang berasal dari super entitas **pengguna**:
+Entitas penjual merupakan sub-entitas dari pengguna yang menyimpan informasi khusus terkait peran pengguna sebagai penjual di marketplace. Data yang disimpan mencakup atribut yang relevan untuk aktivitas penjualan, seperti nama toko, profil, dan informasi terkait operasional. Dengan memisahkan data penjual dari entitas pengguna umum, sistem dapat mengelola akun penjual secara lebih terstruktur, memudahkan pengelolaan produk, transaksi, dan pengaturan toko.
 
 | Atribut           | Lebar data | Tipe data                           | Keterangan              |
 | ----------------- | ---------- | ----------------------------------- | ----------------------- |
 | id_user           |            | int                                 | FK (pengguna . id_user) |
-| nama_toko         | 30         | varchar                             |                         |
+| nama_toko         | 20         | varchar                             | *unique*                |
 | deskripsi_toko    |            | text                                |                         |
 | rerata_rating     |            | float                               |                         |
 | jumlah_produk     |            | int                                 |                         |
@@ -163,48 +132,29 @@ Ketika pengguna membuka toko, maka akan ada beberapa data lain yang harus ditamb
 | tipe_toko         |            | enum(biasa, partner, official)      |                         |
 | status_verifikasi |            | enum(belum, proses, verif, ditolak) |                         |
 
+## 2.9 | Entitas Voucher Platform
+Entitas Voucher Platform menyimpan informasi voucher yang diterbitkan oleh platform, termasuk nama, deskripsi, tipe potongan (persen atau nominal), nilai, minimum pembelian, status aktif/nonaktif, dan periode berlaku, sehingga sistem dapat mengelola promosi secara terpusat dan memastikan penggunaan voucher yang konsisten.
 
-> Verif: ✅ Penjual
+| Atribut             | Lebar data | Tipe data             | Keterangan            |
+| ------------------- | ---------- | --------------------- | --------------------- |
+| id_voucher_platform | 10         | int                   | PK (*auto_increment*) |
+| nama_voucher        | 30         | varchar               | *unique*              |
+| deskripsi           | 200        | varchar               |                       |
+| tipe_voucher        |            | enum(persen, nominal) |                       |
+| value               |            | int                   |                       |
+| min_value           |            | int                   |                       |
+| status              |            | enum(aktif, nonaktif) |                       |
+| start_date          |            | datetime              |                       |
+| end_date            |            | datetime              |                       |
 
-Penjual akan memiliki alamat yang ditujukan oleh kurir pengangkut barang, sehingga dibuat entitas **alamat penjual**:
+## 2.10 | Entitas Voucher Penjual
 
-| Atribut       | Lebar data | Tipe data                 | Keterangan             |
-| ------------- | ---------- | ------------------------- | ---------------------- |
-| id_alamat     |            | int                       | PK (*auto increment*)  |
-| id_penjual    |            | int                       | FK (penjual . id_user) |
-| nama_gudang   | 50         | varchar                   |                        |
-| detail_alamat |            | text                      |                        |
-| kota          | 50         | varchar                   |                        |
-| kode_pos      | 10         | varchar                   |                        |
-| is_utama      |            | boolean (default *false*) |                        |
-> Verif: ✅ Alamat penjual
-
-### 2.4 | Voucher
-
-
-Sebuah platform marketplace sering mengadakan event spesial, yang mana kadang memberikan voucher potongan harga untuk banyak pembeli di platformnya. Jadi, akan dibuat voucher global yang akan menangani hal ini, berupa entitias **voucher platform** dengan isi sebagai berikut:
-
-| Atribut             | Lebar data | Tipe data             | Keterangan |
-| ------------------- | ---------- | --------------------- | ---------- |
-| id_voucher_platform | 10         | varchar               | PK         |
-| nama_voucher        | 30         | varchar               |            |
-| deskripsi           | 200        | varchar               |            |
-| tipe_voucher        |            | enum(persen, nominal) |            |
-| value               |            | int                   |            |
-| min_value           |            | int                   |            |
-| status              |            | enum(aktif, nonaktif) |            |
-| start_date          |            | datetime              |            |
-| end_date            |            | datetime              |            |
-> Verif: ❌ voucher platform
-
-
-Selain platform yang bisa memberikan voucher, penjual juga bisa membuat voucher yang dikhususkan untuk pembelinya ketika membeli produk dari toko tau marketplacenya. Oleh karena itu dibuatlah entitias **voucher  penjual** sebagai berikut:
-
+Entitas Voucher Penjual menyimpan informasi voucher yang diterbitkan secara khusus oleh penjual. Pemisahan entitas ini dari Voucher Platform memungkinkan sistem membedakan antara promosi global dari platform dan promosi individual dari penjual, sehingga memudahkan pengelolaan, pelacakan, dan menjaga konsistensi data masing-masing jenis voucher.
 
 | Atribut            | Lebar data | Tipe data             | Keterangan             |
 | ------------------ | ---------- | --------------------- | ---------------------- |
-| id_voucher_penjual | 10         | varchar               | PK                     |
-| id_penjual         |            |                       | FK (penjual . id_user) |
+| id_voucher_penjual |            | int                   | PK                     |
+| id_penjual         |            | int                   | FK (penjual . id_user) |
 | nama_voucher       | 30         | varchar               |                        |
 | deskripsi          | 200        | varchar               |                        |
 | tipe_voucher       |            | enum(persen, nominal) |                        |
@@ -213,38 +163,31 @@ Selain platform yang bisa memberikan voucher, penjual juga bisa membuat voucher 
 | status             |            | enum(aktif, nonaktif) |                        |
 | start_date         |            | datetime              |                        |
 | end_date           |            | datetime              |                        |
-> Verif: ❌ voucher penjual
+
+## 2.11 | Entitas Voucher Terpakai
 
 Untuk menandai apakah pembeli tertentu sudah pernah menggunakan voucher tersebut atau belum (pembeli hanya bisa menggunakan voucher satu kali), maka dibuatlah entitias relasi yaitu **voucher terpakai** sebagai berikut:
 
-| Atribut             | Lebar data | Tipe data               | Keterangan                                                                                               |
-| ------------------- | ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------- |
-| id_voucher_terpakai |            | int                     | PK (*auto increment*)                                                                                    |
-| id_pembeli          |            | int                     | FK (pembeli . id_user)                                                                                   |
-| kategori_voucher    |            | enum(platform, penjual) |                                                                                                          |
-| voucher_ref_id      | 10         | varchar                 | FK (voucher_platform . id_voucher_platform)<br><br>atau<br><br>FK (voucher_penjual . id_voucher_penjual) |
-| tanggal_pakai       |            | datetime                |                                                                                                          |
+| Atribut             | Lebar data | Tipe data               | Keterangan                                  |
+| ------------------- | ---------- | ----------------------- | ------------------------------------------- |
+| id_voucher_terpakai |            | int                     | PK (*auto increment*)                       |
+| id_pembeli          |            | int                     | FK (pembeli . id_user)                      |
+| kategori_voucher    |            | enum(platform, penjual) |                                             |
+| id_voucher_platform |            |                         | FK (voucher_platform . id_voucher_platform) |
+| id_voucher_penjual  |            | int                     | FK (voucher_penjual . id_voucher_penjual)   |
+| tanggal_pakai       |            | datetime                |                                             |
 
-> Verif: ❌ voucher terpakai
 
+## 2.12 | Entitas Produk
 
-<br/>
-
----
-## 3 | Tentang Produk
-
-### 3.1 | Entitas Produk
-
-Penjual bisa menjual beberapa produk pastinya, sehingga setiap penjual pasti akan memiliki banyak produk di marketplacenya. Jelas, perlu dibuat entitias **produk** dengan atribut sebagai berikut.
-
-Karena suatu produk mungkin memiliki beberapa varian, maka beberapa data penting dari produk akan dipisahkan ke entitas terpisah. Disini hanya ditampilkan keterangan umum produk:
+Penjual bisa menjual beberapa produk pastinya, sehingga setiap penjual pasti akan memiliki banyak produk di marketplacenya. Oleh karena itu, dibuatlah entitas produk. Karena suatu produk mungkin memiliki beberapa varian, maka beberapa data penting dari produk akan dipisahkan ke entitas terpisah. Disini hanya ditampilkan keterangan umum produk:
 
 | Atribut            | lebar data | Tipe data                            | Keterangan                  |
 | ------------------ | ---------- | ------------------------------------ | --------------------------- |
 | id_produk          |            | int                                  | PK (*auto increment*)       |
 | id_penjual         |            | int                                  | FK (penjual . id_user)      |
-| id_kategori        | 5          | varchar                              | FK (kategori . id_kategori) |
-| nama_produk        | 30         | varchar                              |                             |
+| id_kategori        |            | int                                  | FK (kategori . id_kategori) |
+| nama_produk        | 50         | varchar                              |                             |
 | deskripsi          |            | text                                 |                             |
 | rerata_rating      |            | float                                |                             |
 | jumlah_dibeli      |            | int                                  |                             |
@@ -252,38 +195,34 @@ Karena suatu produk mungkin memiliki beberapa varian, maka beberapa data penting
 | tanggal_dibuat     |            | datetime                             |                             |
 | tanggal_diperbarui |            | datetime                             |                             |
 
-> Verif: ❌ Produk
-
-### 3.2 | Entitas Kategori
-
-Mengkategorikan produk akan membuat pengelompokan produk oleh pembeli menjadi lebih mudah. Semisal pembeli mengetik baju, maka kategori pakaian akan keluar. JIka menjadi hanphone, maka barang dengan kategori yang sama akan dikeluarkan. Ini akan memudahkan pencarian dan pengelompokan barang. Oleh karena itu, dibuatlah entitas **kategori**.
-
-Entitas ini akan melakukan *self referencing*, atau berelasi tunggal ke dirinya sendiri (*unary relationship*), sehingga akan ada atribut yang mereference ke Primary Key nya sendiri:
-
-| Atribut           | Lebar data | Tipe data | Keterangan                  |
-| ----------------- | ---------- | --------- | --------------------------- |
-| id_kategori       |            | int       | PK (*auto increment*)       |
-| nama_kategori     | 15         | varchar   |                             |
-| id_kategori_induk |            | int       | FK (kategori . id_kategori) |
-> Verif: ❌ Kategori
-### 3.3 | Entitas Varian
-
-Beberapa produk memiliki beberapa varian. Misalnya keyboard dengan merek yang sama, mungkin memiliki beberapa variann warna dan ukuran, dan beberapa produk lain juga. Oleh karena itu, untuk mengatasi beberapa produk yang memiliki lebih dari satu varian, maka dibuat entitas **varian** sebagai berikut:
+## 2.13 | Entitas Varian
+Entitas Varian digunakan untuk menyimpan detail variasi produk yang ditawarkan oleh penjual, seperti nama varian, SKU, harga, stok, berat, dan status aktif atau nonaktif. Dengan memisahkan varian dari entitas produk utama, sistem dapat mengelola setiap variasi secara spesifik, memudahkan pengaturan stok dan harga, serta menjaga integritas data produk yang memiliki lebih dari satu opsi atau konfigurasi.
 
 | Atribut            | Lebar data | Tipe data             | Keterangan              |
 | ------------------ | ---------- | --------------------- | ----------------------- |
 | id_varian          |            | int                   | PK (*auto increment*)   |
 | id_produk          |            | int                   | FK (produk . id_produk) |
 | nama_varian        | 50         | varchar               |                         |
-| sku                | 50         | varchar               |                         |
+| sku                | 50         | varchar               | *unique*                |
 | harga              |            | int                   |                         |
 | stok               |            | int                   |                         |
 | berat              |            | float                 |                         |
 | status             |            | enum(aktif, nonaktif) |                         |
 | tanggal_dibuat     |            | datetime              |                         |
 | tanggal_diperbarui |            | datetime              |                         |
-> Verif: ❌ Varian
-### 3.3 | Entitas Produk Media
+
+
+## 2.14 | Entitas Kategori
+
+Mengkategorikan produk memudahkan pembeli dalam mencari dan mengelompokkan barang. Misalnya, saat pembeli mencari “baju”, sistem akan menampilkan produk dalam kategori pakaian; jika mencari “handphone”, produk dengan kategori yang sama akan ditampilkan. Untuk mendukung hal ini, dibuat entitas Kategori. Entitas ini menggunakan self-referencing (_unary relationship_), di mana setiap kategori dapat memiliki kategori induk yang direferensikan melalui atribut id_kategori_induk. Desain ini memungkinkan struktur kategori bersarang atau hierarkis, sehingga pengelompokan produk menjadi lebih fleksibel dan sistematis.
+
+| Atribut           | Lebar data | Tipe data | Keterangan                  |
+| ----------------- | ---------- | --------- | --------------------------- |
+| id_kategori       |            | int       | PK (*auto increment*)       |
+| nama_kategori     | 15         | varchar   |                             |
+| id_kategori_induk |            | int       | FK (kategori . id_kategori) |
+
+## 2.15 | Entitas Produk Media
 
 Apa yang lebih meyakinkan pembeli selain gambar produk yang meyakinkan? Gambar yang bagus dan menarik dari produk berguna untuk menarik perhatian pembeli dan menunjukan seperti apa produk yang penjual jual di marketplacenya. Tanpa gambar, setiap membeli produk pasti akan terasa *membeli kucing dalam karung*.
 
@@ -299,19 +238,17 @@ Maka berikut entitas produk media:
 
 | Atribut         | Lebar data | Tipe data           | Keterangan              |
 | --------------- | ---------- | ------------------- | ----------------------- |
-| id_media_produk |            | int                 | PK (*auto increment*)   |
+| id_produk_media |            | int                 | PK (*auto increment*)   |
 | id_produk       |            | int                 | FK (produk . id_produk) |
 | url_media       | 250        | varchar             |                         |
 | tipe_media      |            | enum(gambar, video) |                         |
 | no_urut         |            | int                 |                         |
 | is_thumbnail    |            | boolean             |                         |
 | alt_text        | 50         | varchar             |                         |
-> Verif: ❌ Produk media
-### 3.4 | Ulasan
 
-Ulasan suatu produk bisa menjadi tolak ukur kepuasan pembeli, dan seberapa bagus suatu produk. Pembeli yang sudah membeli dan memverifikasi telah menerima barang, bisa memberikan ulasan dan rating terhadap produk tersebut. Pembeli juga bisa memberikan beberapa gambar atau video ulasan sebagai file tambahan.
+## 2.16 | Entitas Ulasan
 
-Oleh karena itu, dibuatlah entitas **ulasan** sebagai berikut:
+Ulasan suatu produk bisa menjadi tolak ukur kepuasan pembeli, dan seberapa bagus suatu produk. Pembeli yang sudah membeli dan memverifikasi telah menerima barang, bisa memberikan ulasan dan rating terhadap produk tersebut. 
 
 | Atribut        | Lebar data | Tipe data | Keterangan              |
 | -------------- | ---------- | --------- | ----------------------- |
@@ -319,71 +256,46 @@ Oleh karena itu, dibuatlah entitas **ulasan** sebagai berikut:
 | id_produk      |            | int       | FK (produk . id_produk) |
 | id_pembeli     |            | int       | FK (pembeli . id_user)  |
 | rating         |            | int       |                         |
-| komentar       |            | text      |                         |
+| komentar       |            | varchar   |                         |
 | tanggal_ulasan |            | datetime  |                         |
-| jumlah_like    |            | int       |                         |
-| jumlah_media   |            | int       |                         |
-
-> Verif: ❌ Ulasan
-
-### 3.5 | Ulasan Media
-
-Karena setiap ulasan bisa mengandung media seperti foto atau video, maka dibuatlah entitias baru untuk menampung media yang berasal dari ulasan pembeli, yaitu entitias **ulasan media**:
-
-| Atribut    | Lebar data | Tipe data           | Keterangan              |
-| ---------- | ---------- | ------------------- | ----------------------- |
-| id_media   |            | int                 | PK (*auto increment*)   |
-| id_ulasan  |            | int                 | FK (ulasan . id_ulasan) |
-| url_media  | 250        | varchar             |                         |
-| tipe_media |            | enum(gambar, video) |                         |
-| urutan     |            | int                 |                         |
-> Verif: ❌ Ulasan media
-
-<br/>
-
----
-
-## 4 | Proses Transaksi 
-
-### 4.1 | Entitas Pemesanan
-
-Pembeli bisa saja membeli beberapa produk sekaligus dalam sekali pemesanan. Entah itu pembeli membeli banyak barang dari satu toko, atau banyak barang dari banyak toko sekaligus, maka sistem harus bisa menanganinya.
-
-Maka dibuatlah entitas **pemesanan** sebagai berikut:
-
-| Atribut              | Lebar data | Tipe data                                                                   | Keterangan                                    |
-| -------------------- | ---------- | --------------------------------------------------------------------------- | --------------------------------------------- |
-| id_pemesanan         |            | int                                                                         | PK (*auto increment*)                         |
-| id_pembeli           |            | int                                                                         | FK (pembeli . id_user)                        |
-| id_penjual           |            | int                                                                         | FK (penjual . id_user)                        |
-| id_alamat_penjual    |            | int                                                                         | FK (alamat_penjual . id_alamat)               |
-| id_alamat_pembeli    |            | int                                                                         | FK (alamat_pembeli . id_alamat)               |
-| id_detail_pengiriman |            | int                                                                         | FK (detail_pengiriman . id_detail_pengiriman) |
-| date_pesan           |            | datetime                                                                    |                                               |
-| catatan_pembeli      | 200        | varchar                                                                     |                                               |
-| metode_pembayaran    |            | enum (transfer, cod)                                                        |                                               |
-| tagihan_produk       |            | int                                                                         |                                               |
-| ongkos_kirim         |            | int                                                                         |                                               |
-| harga_total          |            | int                                                                         |                                               |
-| status               |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                               |
 
 
-> Verif: ❌ Pemesanan
+## 2.17 | Entitas Ulasan Media
 
-### 4.2 | Pendukung Entititas Pemesanan
+Karena setiap ulasan dapat menyertakan media seperti foto atau video, dibuat entitas Ulasan Media untuk menampung file media yang terkait dengan ulasan pembeli. Entitas ini menyimpan informasi seperti URL media, tipe media (gambar atau video), dan urutan tampilannya. Dengan memisahkan media dari entitas ulasan, sistem dapat mengelola berbagai jenis media secara terstruktur, memudahkan penambahan atau penghapusan media, serta menjaga integritas dan keterkaitan antara ulasan dan media yang menyertainya.
 
-Karena dalam satu pemesanan bisa menggunakan beberapa voucher, misal pembeli menggunakan voucher platform dan voucher penjual diwaktu yang sama, maka dibuat entitas relasi, karena terdapat hubungan many-to-many, sehingga dibuat table **pemesanan voucher** seperti berikut:
+| Atribut         | Lebar data | Tipe data           | Keterangan              |
+| --------------- | ---------- | ------------------- | ----------------------- |
+| id_ulasan_media |            | int                 | PK (*auto increment*)   |
+| id_ulasan       |            | int                 | FK (ulasan . id_ulasan) |
+| url_media       | 250        | varchar             |                         |
+| tipe_media      |            | enum(gambar, video) |                         |
+| urutan          |            | int                 |                         |
+
+## 2.18 | Entitas Pemesanan
+
+Entitas pemesanan digunakan untuk menyimpan data transaksi yang dilakukan pembeli di marketplace. Setiap pemesanan mencakup informasi seperti pembeli, penjual, alamat pengiriman, metode pembayaran, tagihan produk, ongkos kirim, total harga, dan status pemesanan. Dengan entitas ini, sistem dapat mencatat dan mengelola seluruh proses transaksi secara terstruktur, memudahkan pelacakan pesanan, serta menjaga integritas data antara pembeli, penjual, dan detail pengiriman.
+
+| Atribut             | Lebar data | Tipe data                                                                   | Keterangan                                |
+| ------------------- | ---------- | --------------------------------------------------------------------------- | ----------------------------------------- |
+| id_pemesanan        |            | int                                                                         | PK (*auto increment*)                     |
+| id_pembeli          |            | int                                                                         | FK (pembeli . id_user)                    |
+| id_penjual          |            | int                                                                         | FK (penjual . id_user)                    |
+| id_alamat_pembeli   |            | int                                                                         | FK (alamat . id_alamat)                   |
+| id_alamat_penjual   |            | int                                                                         | FK (alamat . id_alamat)                   |
+| id_voucher_terpakai |            | int                                                                         | FK (voucher_terpakai.id_voucher_terpakai) |
+| date_pesan          |            | datetime                                                                    |                                           |
+| catatan_pembeli     | 200        | varchar                                                                     |                                           |
+| metode_pembayaran   |            | enum (transfer, cod)                                                        |                                           |
+| tagihan_produk      |            | int                                                                         |                                           |
+| ongkos_kirim        |            | int                                                                         |                                           |
+| harga_total         |            | int                                                                         |                                           |
+| status              |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                           |
 
 
-| Atribut             | Lebar data | Tipe data | Keterangan                                  |
-| ------------------- | ---------- | --------- | ------------------------------------------- |
-| id_pemesanan        |            | int       | FK (pemesanan . id_pemesanan)               |
-| id_voucher_terpakai | 10         | varchar   | FK (voucher_terpakai . id_voucher_terpakai) |
-| potongan_diterapkan |            | int       |                                             |
+## 2.19 | Entititas Detail Pemesanan
 
-> Verif: ❌ Pemesanan voucher
-
-Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yang bagus adalah membuat entitas detail pemesanan untuk lebih merincikan produk yang dipesan. Oleh karena itu dibuatlah entitas baru berupa **detail pemesanan**, dengan atribut berikut:
+Entitas Detail Pemesanan menyimpan informasi rinci mengenai setiap item yang termasuk dalam suatu pemesanan. Setiap catatan menghubungkan pemesanan dengan produk atau varian yang dibeli, serta mencatat kuantitas, harga satuan, dan subtotal item. Dengan memisahkan detail pemesanan dari entitas pemesanan utama, sistem dapat mengelola transaksi dengan lebih terstruktur, mendukung produk dengan variasi.
 
 | Atribut       | Lebar data | Tipe data | Keterangan                    |
 | ------------- | ---------- | --------- | ----------------------------- |
@@ -393,25 +305,23 @@ Entitas pemesanan hanya akan menyimpan id_pemesanan saja. Aturan normalisasi yan
 | kuantitas     |            | int       |                               |
 | harga_satuan  |            | int       |                               |
 | subtotal_item |            | int       |                               |
-> Verif: ❌ Detail pemesanan
 
-
-### 4.3 | Pengiriman Paket atau Barang
+## 2.20 | Entitas Logistik
 
 Ketika pembeli membeli barang, maka barang tersebut akan diambil dari penjual, dan dikirimkan ke pembeli. Dan... sudah. 
 
 Tidak semudah itu ferguso. Ini bagian yang paling rumit disini 🥲.
 
-```ad-danger
 1. Pertama, ketika pembeli membeli barang, pembeli bisa memilih layanan pengiriman yang disediakan oleh beberapa perusahaan logistik seperti JNE, JNT, siCepat, dan semacamnya, yang mana masing-masing jasa pengiriman memiliki layanan yang memiliki harga yang mungkin berbeda
 
 2. Kedua, pembeli harus mengetahui ongkos kirim yang mungkin berlaku. 
 
 3. Ketiga, pembeli mengetahui estimasi hari yang dibutuhkan untuk barang yang ia beli bisa sampai.
-```
 
-Untuk mengatasi masalah pertama, maka entitas pemesanan harus memiliki atribut yang berasal dari entitas yang mengerjakan peengiriman. Maka, dibuatlah entitias **logistik** sebagai berikut:
 
+Untuk mengatasi masalah pertama, maka entitas pemesanan harus memiliki atribut yang berasal dari entitas yang mengerjakan peengiriman. Maka, dibuatlah entitias **logistik**.
+
+Entitas Logistik berfungsi untuk menampung data penyedia jasa pengiriman yang bekerja sama dengan marketplace. Dengan adanya entitas ini, sistem dapat mengelola penyedia logistik secara terpusat, memudahkan pemeliharaan informasi, dan mendukung kelancaran proses pengiriman pesanan bagi pengguna.
 
 | Atribut       | Lebar data | Tipe data             | Keterangan            |
 | ------------- | ---------- | --------------------- | --------------------- |
@@ -420,11 +330,10 @@ Untuk mengatasi masalah pertama, maka entitas pemesanan harus memiliki atribut y
 | nama_logistik | 20         | varchar               |                       |
 | kontak_cs     | 15         | varchar               |                       |
 | status        |            | enum(aktif, nonaktif) |                       |
-| keterangan    |            | text                  |                       |
-> Verif: ❌ Logistik
 
-Lalu, karena setiap logistik memiliki beberapa layanan, misal JNE memiliki layanan berupa pengiriman regulasi, ekonomi, express, atau instan, maka dibuat entitas **layanan pengiriman** sebagai berikut:
+## 2.21 | Entitas Layanan Pengiriman
 
+Entitas Layanan Pengiriman menyimpan informasi mengenai opsi layanan yang ditawarkan oleh masing-masing penyedia logistik, seperti reguler, ekspres, atau ekonomi. Dengan entitas ini, sistem dapat menampilkan pilihan layanan pengiriman yang tersedia bagi pembeli saat melakukan checkout, memudahkan pembeli memilih layanan sesuai kebutuhan, dan membantu mengelola hubungan antara pesanan dan penyedia logistik secara terstruktur.
 
 | Atribut                 | Lebar data | Tipe data | Keterangan                  |
 | ----------------------- | ---------- | --------- | --------------------------- |
@@ -436,10 +345,9 @@ Lalu, karena setiap logistik memiliki beberapa layanan, misal JNE memiliki layan
 | harga_per_kg            |            | float     |                             |
 | estimasi_perhari_tempuh |            | int       |                             |
 
-> Verif: ❌ Layanan pengiriman
+## 2.22 | Entitas Detail Pengiriman
 
-Karena menaruh detail transaksi di entitias pemesanan, maka akan lebih baik untuk membuat entitias **detail pengiriman**, sehingga entitias pemesanan hanya perlu menyimpan FK dari PK di detail pengiriman, yang kira-kira berisi sebagai berikut:
-
+Entitas Detail Pengiriman digunakan untuk menyimpan informasi rinci mengenai pengiriman setiap pemesanan. Entitas ini mencakup data terkait layanan pengiriman yang dipilih, jarak tempuh, biaya berdasarkan jarak dan berat, total biaya pengiriman, serta estimasi waktu tiba. Dengan adanya entitas ini, sistem dapat mengelola proses pengiriman secara lebih terstruktur, menghitung biaya pengiriman dengan akurat, dan mendukung pemantauan status pengiriman bagi setiap pesanan.
 
 | Atribut              | Lebar data | Tipe data | Keterangan                                      |
 | -------------------- | ---------- | --------- | ----------------------------------------------- |
@@ -452,7 +360,6 @@ Karena menaruh detail transaksi di entitias pemesanan, maka akan lebih baik untu
 | total                |            | int       |                                                 |
 | estimasi_hari        |            | int       |                                                 |
 
-> Verif: ❌ Detail pengiriman
 
 Untuk pengisian entitas diatas, didasarkan pada perkiraan rumus berikut:
 
