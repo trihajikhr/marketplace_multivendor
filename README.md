@@ -204,7 +204,7 @@ Entitas Varian digunakan untuk menyimpan detail variasi produk yang ditawarkan o
 | id_produk          |            | int                   | FK (produk . id_produk) |
 | nama_varian        | 50         | varchar               |                         |
 | sku                | 50         | varchar               | *unique*                |
-| harga              |            | int                   |                         |
+| harga              |            | decimal (15,2)        |                         |
 | stok               |            | int                   |                         |
 | berat              |            | float                 |                         |
 | status             |            | enum(aktif, nonaktif) |                         |
@@ -284,12 +284,12 @@ Entitas pemesanan digunakan untuk menyimpan data transaksi yang dilakukan pembel
 | id_alamat_pembeli   |            | int                                                                         | FK (alamat . id_alamat)                   |
 | id_alamat_penjual   |            | int                                                                         | FK (alamat . id_alamat)                   |
 | id_voucher_terpakai |            | int                                                                         | FK (voucher_terpakai.id_voucher_terpakai) |
-| date_pesan          |            | datetime                                                                    |                                           |
+| tanggal_pemesanan   |            | datetime                                                                    |                                           |
 | catatan_pembeli     | 200        | varchar                                                                     |                                           |
 | metode_pembayaran   |            | enum (transfer, cod)                                                        |                                           |
-| tagihan_produk      |            | int                                                                         |                                           |
-| ongkos_kirim        |            | int                                                                         |                                           |
-| harga_total         |            | int                                                                         |                                           |
+| tagihan_produk      | 15,2       | decimal                                                                     |                                           |
+| ongkos_kirim        | 15,2       | decimal                                                                     |                                           |
+| harga_total         | 15,2       | decimal                                                                     |                                           |
 | status              |            | enum (menunggu_bayar, diproses, dikirim, selesai, dibatalkan, dikembalikan) |                                           |
 
 
@@ -303,8 +303,8 @@ Entitas Detail Pemesanan menyimpan informasi rinci mengenai setiap item yang ter
 | id_produk     |            | int       | FK (produk . id_produk)       |
 | id_varian     |            | int       | FK (varian . id_varian)       |
 | kuantitas     |            | int       |                               |
-| harga_satuan  |            | int       |                               |
-| subtotal_item |            | int       |                               |
+| harga_satuan  | 15,2       | decimal   |                               |
+| subtotal_item | 15,2       | decimal   |                               |
 
 ## 2.20 | Entitas Logistik
 
@@ -341,8 +341,8 @@ Entitas Layanan Pengiriman menyimpan informasi mengenai opsi layanan yang ditawa
 | id_logistik             |            | int       | FK (logistik . id_logistik) |
 | nama_layanan            | 20         | varchar   |                             |
 | minimal_jarak           |            | float     |                             |
-| harga_per_km            |            | float     |                             |
-| harga_per_kg            |            | float     |                             |
+| harga_per_km            | 15,2       | float     |                             |
+| harga_per_kg            | 15,2       | float     |                             |
 | estimasi_perhari_tempuh |            | int       |                             |
 
 ## 2.22 | Entitas Detail Pengiriman
@@ -369,3 +369,22 @@ Untuk pengisian entitas diatas, didasarkan pada perkiraan rumus berikut:
 4. `Total` didapat dari menambahkan hasil dari `harga tempuh` + `harga berat`. 
 5. `Estimasi hari` didapat dengan membagi jarak tempuh dengan `estimasi_perhari_tempuh` yang dibulatkan ke atas. 
 
+<br/>
+
+---
+# 3 | Identifikasi Relasi
+
+
+| No  | Entitias               | Relasi | Keterangan                                                                                                   |
+| --- | ---------------------- | ------ | ------------------------------------------------------------------------------------------------------------ |
+| 1   | Pengguna - Pembeli     | 1:1    | Pengguna bisa menjadi seorang pembeli                                                                        |
+| 2   | Pengguna - Penjual     | 1:1    | Pengguna bisa menjadi seorang penjual                                                                        |
+| 3   | Pengguna - Rekening    | 1:N    | Satu pengguna bisa memiliki banyak rekening yang terdaftar pada platform                                     |
+| 4   | Rekening - Bank        | N:1    | Banyak nomor rekening dimiliki oleh satu Bank, dan satu Bank memiliki banyak nomor rekening berbeda          |
+| 5   | Pengguna - Alamat      | 1:N    | Satu pengguna bisa mendaftarkan beberapa alamat, dan banyak alamat mungkin untuk dimiliki oleh satu pengguna |
+| 6   | Pembeli - Toko Favorit | 1:N    | Satu pembeli bisa memfavoritkan banyak toko penjual                                                          |
+| 7   | Penjual - Toko Favorit | 1:N    | Satu toko penjual bisa difavoritkan banyak pembeli                                                           |
+| 8   | Pembeli - Wishlist     | 1:N    | Satu pembeli bisa menambahkan banyak produk kedalam daftar wishlist                                          |
+| 9   | Produk - Wishlist      | 1:N    | Satu produk bisa terdaftar di banyak wishlist pembeli                                                        |
+| 10  | Produk - Kategori      | N:1    | Banyak produk bisa terdaftar dibawah satu kategori                                                           |
+| 11  |                        |        |                                                                                                              |
